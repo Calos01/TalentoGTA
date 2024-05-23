@@ -8,8 +8,8 @@ import { EmpleadoService } from 'src/app/Services/empleado.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatGridListModule } from '@angular/material/grid-list';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { TipoIdentificacionService } from 'src/app/Services/tipo-identificacion.service';
+import { PaiseService } from 'src/app/Services/paise.service';
 
 @Component({
   selector: 'app-list-empleado',
@@ -20,26 +20,31 @@ export class ListEmpleadoComponent implements AfterViewInit, OnInit {
   displayedColumns: string[] = ['nombreApellido', 'tipoIdentificacion', 'nroIdentificacion', 'paisEmpleo', 'email', 'estado', 'acciones'];
   dataSource = new MatTableDataSource<Empleado>();
   filterForm: FormGroup;
+  paises: any[] = [];
+  tiposIdentificacion: any[] = [];
 //progressbar
   loading:boolean=false;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private fb: FormBuilder,private _snackBar: MatSnackBar, private _empleadoService:EmpleadoService, public dialog: MatDialog) {
+  constructor(private fb: FormBuilder,private _snackBar: MatSnackBar, private _empleadoService:EmpleadoService, public dialog: MatDialog, private paiseService: PaiseService,
+    private tipoIdentificacionService: TipoIdentificacionService,) {
     this.filterForm = this.fb.group({
       primer_nombre: [''],
-      otros_nombres: [''],
+      otro_nombre: [''],
       primer_apellido: [''],
       segundo_apellido: [''],
       tipo_identificacion: [''],
       numero_identificacion: [''],
-      pais_empleo: [''],
+      paise_empleo: [''],
       email: [''],
       estado: ['']
     });
   }
   
   ngOnInit(): void {
+    this.getPaises();
+    this.getTiposIdentificacion();
     this.ObtenerEmpleados();
   }
 
@@ -56,6 +61,18 @@ export class ListEmpleadoComponent implements AfterViewInit, OnInit {
     const filterValue = (event.target as HTMLInputElement).value; // obtenemos valor
     // Datasource defaults to lowercase matches
     this.dataSource.filter = filterValue.trim().toLowerCase();//filtros
+  }
+
+  getPaises() {
+    this.paiseService.getListPaises().subscribe(data => {
+      this.paises = data;
+    });
+  }
+
+  getTiposIdentificacion() {
+    this.tipoIdentificacionService.getListTipoIdentificacion().subscribe(data => {
+      this.tiposIdentificacion = data;
+    });
   }
 
   ObtenerEmpleados(filters: any = {}): void {

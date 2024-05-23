@@ -56,6 +56,8 @@ class Empleado extends Model
     // Generar email
     public static function generateEmail($primerNombre, $primerApellido, $paiseId)
     {
+        $primerNombre = strtolower(trim(str_replace(' ', '', $primerNombre)));
+        $primerApellido = strtolower(trim(str_replace(' ', '', $primerApellido)));
         $dominio = $paiseId == 1 ? 'global.com.co' : 'global.com.us';
         $emailBase = strtolower($primerNombre . '.' . $primerApellido);
         $email = $emailBase . '@' . $dominio;

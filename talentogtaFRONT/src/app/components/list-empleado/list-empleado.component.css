@@ -42,7 +42,7 @@ table {
   .butagregar:hover{
     padding: 10px;
     font-size: small;
-    background-color: blue;
+    background-color: #673AB7;
     border-radius: 10px;
     color: white;
   }
@@ -50,6 +50,10 @@ table {
     width: 100%;
     padding: 0 3px;
   }  
-  mat-grid-tile{
-   
+
+  .mat-column-estado {
+    padding-left: 50px;
+  }
+  .estado-cell {
+    padding-left: 50px; 
   }
